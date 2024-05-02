@@ -6,7 +6,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://aisensy-eta.vercel.app",
     credentials: true,
   })
 );

@@ -7,72 +7,7 @@ import Papa from "papaparse";
 
 const limits = [1, 2, 5, 10, 15, 20, 25, 30];
 
-function validateFile(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
 
-    reader.onload = async (event) => {
-      const content = event.target.result;
-
-      try {
-        // if (file.name.endsWith(".csv")) {
-        //   Papa.parse(content, {
-        //     header: true,
-        //     skipEmptyLines: true,
-        //     complete: (result) => {
-        //       const parsedData = result.data;
-        //       const requiredColumns = ["Name", "Email", "Mobile Number"];
-        //       const fileColumns = Object.keys(parsedData[0]);
-        //       const missingColumns = requiredColumns.filter(
-        //         (col) => !fileColumns.includes(col)
-        //       );
-        //       if (missingColumns.length > 0) {
-        //         reject(
-        //           `Missing required columns: ${missingColumns.join(", ")}`
-        //         );
-        //       } else {
-        //         resolve(parsedData);
-        //       }
-        //     },
-        //     error: (error) => {
-        //       reject("Error parsing CSV file");
-        //     },
-        //   });
-        // } else
-
-        if (file.name.endsWith(".xlsx")) {
-          const workbook = xlsx.read(content, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const jsonContent = xlsx.utils.sheet_to_json(sheet);
-
-          const requiredColumns = ["Name", "Email", "Mobile Number"];
-          const fileColumns = Object.keys(jsonContent[0]);
-          const missingColumns = requiredColumns.filter(
-            (col) => !fileColumns.includes(col)
-          );
-
-          if (missingColumns.length > 0) {
-            reject(`Missing required columns: ${missingColumns.join(", ")}`);
-          } else {
-            resolve(null);
-          }
-        } else {
-          reject("Unsupported file type");
-        }
-      } catch (error) {
-        toast.error("Inavlid format");
-        reject(error.message);
-      }
-    };
-
-    reader.onerror = () => {
-      reject("Error reading file");
-    };
-
-    reader.readAsArrayBuffer(file);
-  });
-}
 
 function ContactDetails() {
   const [csvFile, setCsvFile] = useState(null);
@@ -84,13 +19,8 @@ function ContactDetails() {
   const handleCsvFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      //   try {
-      // await validateFile(file);
-      // setValidationError(null);
-      setCsvFile(file);
-      //   } catch (error) {
-      //     setValidationError(error);
-      //   }
+
+
     } else {
       setCsvFile(null);
     }
@@ -99,7 +29,7 @@ function ContactDetails() {
   const fetchContact = async (page) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/users/getcontacts?page=${page}&limit=${limit}`
+        `https://aisensy-contact-api.onrender.com/api/v1/users/getcontacts?page=${page}&limit=${limit}`
       );
       setContacts(response.data);
       console.log(response.data);
@@ -120,7 +50,7 @@ function ContactDetails() {
     formData.append("contactsFile", csvFile);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/users/upload", formData, {
+      const response = await axios.post("https://aisensy-contact-api.onrender.com/api/v1/users/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
