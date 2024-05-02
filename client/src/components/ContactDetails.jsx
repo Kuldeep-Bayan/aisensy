@@ -19,7 +19,7 @@ function ContactDetails() {
   const handleCsvFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-
+      setCsvFile(file)
 
     } else {
       setCsvFile(null);
