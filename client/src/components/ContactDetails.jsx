@@ -29,7 +29,7 @@ function ContactDetails() {
   const fetchContact = async (page) => {
     try {
       const response = await axios.get(
-        `https://aisensy-contact-api.onrender.com/api/v1/users/getcontacts?page=${page}&limit=${limit}`
+        `https://aisensy-contact-api.onrender.com/api/v1/users/getcontacts?page=${page}&limit=${limit}` || "http://localhost:9000/api/v1/users/upload"
       );
       setContacts(response.data);
       console.log(response.data);
@@ -50,7 +50,7 @@ function ContactDetails() {
     formData.append("contactsFile", csvFile);
 
     try {
-      const response = await axios.post("https://aisensy-contact-api.onrender.com/api/v1/users/upload", formData, {
+      const response = await axios.post("https://aisensy-contact-api.onrender.com/api/v1/users/upload" || "http://localhost:9000/api/v1/users/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
